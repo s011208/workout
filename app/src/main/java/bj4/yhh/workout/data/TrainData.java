@@ -19,13 +19,13 @@ public class TrainData implements Parcelable {
     public static final int STATUS_FINISH = 3;
     public static final int STATUS_BREAK_TIME = 4;
 
-    private static final String ID = "id";
-    private static final String TRAIN_TITLE = "train_title";
-    private static final String TRAIN_IMAGE_SOURCE = "train_image_source";
-    private static final String TOTAL_TIME = "total_time";
-    private static final String LAP_TIME = "lap_time";
-    private static final String STATUS = "status";
-    private static final String INTENSITY_DATA = "intentsity_data";
+    public static final String ID = "id";
+    public static final String TRAIN_TITLE = "train_title";
+    public static final String TRAIN_IMAGE_SOURCE = "train_image_source";
+    public static final String TOTAL_TIME = "total_time";
+    public static final String LAP_TIME = "lap_time";
+    public static final String STATUS = "status";
+    public static final String INTENSITY_DATA = "intensity_data";
 
     private long mId;
 

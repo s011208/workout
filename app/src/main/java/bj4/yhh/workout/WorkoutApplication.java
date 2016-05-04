@@ -1,8 +1,10 @@
 package bj4.yhh.workout;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 
+import bj4.yhh.workout.remote.DataService;
 import bj4.yhh.workout.remote.RemoteApplicationProxy;
 import bj4.yhh.workout.utilities.ApplicationProxy;
 import bj4.yhh.workout.utilities.Utility;
@@ -18,10 +20,15 @@ public class WorkoutApplication extends Application {
 
     @Override
     public void onCreate() {
+        long start = System.currentTimeMillis();
         super.onCreate();
-        initApplicationProxy();
+        final String processName = initApplicationProxy();
         if (mApplicationProxy != null) {
             mApplicationProxy.onCreate();
+        }
+        startRemoteService();
+        if (DEBUG) {
+            Log.v(TAG, "[onCreate] process: " + processName + ", takes: " + (System.currentTimeMillis() - start));
         }
     }
 
@@ -31,13 +38,13 @@ public class WorkoutApplication extends Application {
         if (mApplicationProxy != null) {
             mApplicationProxy.onTerminate();
         }
+        if (DEBUG) {
+            Log.v(TAG, "[onTerminate]");
+        }
     }
 
-    private void initApplicationProxy() {
+    private String initApplicationProxy() {
         final String processName = Utility.getProcessName(getApplicationContext());
-        if (DEBUG) {
-            Log.v(TAG, "[onCreate] process: " + processName);
-        }
         if (processName != null) {
             if (processName.equals(getPackageName())) {
                 mApplicationProxy = new WorkoutApplicationProxy(getApplicationContext());
@@ -45,5 +52,10 @@ public class WorkoutApplication extends Application {
                 mApplicationProxy = new RemoteApplicationProxy(getApplicationContext());
             }
         }
+        return processName;
+    }
+
+    private void startRemoteService() {
+        getApplicationContext().startService(new Intent(getApplicationContext(), DataService.class));
     }
 }
