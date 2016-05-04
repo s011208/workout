@@ -1,10 +1,9 @@
 package bj4.yhh.workout;
 
 import android.app.Application;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
-import bj4.yhh.workout.remote.RemoteApplication;
+import bj4.yhh.workout.remote.RemoteApplicationProxy;
 import bj4.yhh.workout.utilities.ApplicationProxy;
 import bj4.yhh.workout.utilities.Utility;
 
@@ -20,16 +19,7 @@ public class WorkoutApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        final String processName = getProcessName();
-        if (DEBUG) {
-            Log.v(TAG, "[onCreate] process: " + processName);
-        }
-        if (processName != null) {
-            if (processName.endsWith(":remote")) {
-                mApplicationProxy = new RemoteApplication(getApplicationContext());
-            }
-        }
-
+        initApplicationProxy();
         if (mApplicationProxy != null) {
             mApplicationProxy.onCreate();
         }
@@ -43,12 +33,17 @@ public class WorkoutApplication extends Application {
         }
     }
 
-    private String getProcessName() {
-        try {
-            return getPackageManager().getApplicationInfo(getPackageName(), 0).processName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+    private void initApplicationProxy() {
+        final String processName = Utility.getProcessName(getApplicationContext());
+        if (DEBUG) {
+            Log.v(TAG, "[onCreate] process: " + processName);
         }
-        return null;
+        if (processName != null) {
+            if (processName.equals(getPackageName())) {
+                mApplicationProxy = new WorkoutApplicationProxy(getApplicationContext());
+            } else if (processName.endsWith(":remote")) {
+                mApplicationProxy = new RemoteApplicationProxy(getApplicationContext());
+            }
+        }
     }
 }

@@ -7,8 +7,8 @@ import bj4.yhh.workout.utilities.ApplicationProxy;
 /**
  * Created by yenhsunhuang on 2016/5/4.
  */
-public class RemoteApplication extends ApplicationProxy {
-    public RemoteApplication(Context context) {
+public class RemoteApplicationProxy extends ApplicationProxy {
+    public RemoteApplicationProxy(Context context) {
         super(context);
     }
 
