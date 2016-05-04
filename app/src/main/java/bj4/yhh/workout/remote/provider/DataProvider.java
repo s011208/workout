@@ -1,8 +1,10 @@
 package bj4.yhh.workout.remote.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -17,6 +19,20 @@ import bj4.yhh.workout.data.TrainData;
 public class DataProvider extends ContentProvider {
     private SQLiteDatabase mDatabase;
 
+    private static final String AUTHORITY = "bj4.yhh.workout.remote.provider.DataProvider";
+
+    private static final String PATTERN_TRAIN_DATA = Database.TABLE_TRAIN_DATA;
+
+    private static final int CODE_TRAIN_DATA = 1;
+
+    public static final Uri URI_TRAIN_DATA = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_TRAIN_DATA);
+
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    static {
+        sUriMatcher.addURI(AUTHORITY, PATTERN_TRAIN_DATA, CODE_TRAIN_DATA);
+    }
+
     @Override
     public boolean onCreate() {
         mDatabase = new Database(getContext()).getWritableDatabase();
@@ -26,6 +42,10 @@ public class DataProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        switch (sUriMatcher.match(uri)) {
+            case CODE_TRAIN_DATA:
+                return mDatabase.query(Database.TABLE_TRAIN_DATA, projection, selection, selectionArgs, sortOrder, null, null);
+        }
         return null;
     }
 
@@ -38,16 +58,28 @@ public class DataProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        switch (sUriMatcher.match(uri)) {
+            case CODE_TRAIN_DATA:
+                return ContentUris.withAppendedId(uri, mDatabase.insert(Database.TABLE_TRAIN_DATA, null, values));
+        }
         return null;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        switch (sUriMatcher.match(uri)) {
+            case CODE_TRAIN_DATA:
+                return mDatabase.delete(Database.TABLE_TRAIN_DATA, selection, selectionArgs);
+        }
         return 0;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        switch (sUriMatcher.match(uri)) {
+            case CODE_TRAIN_DATA:
+                return mDatabase.update(Database.TABLE_TRAIN_DATA, values, selection, selectionArgs);
+        }
         return 0;
     }
 
