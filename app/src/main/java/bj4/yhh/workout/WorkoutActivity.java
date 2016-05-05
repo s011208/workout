@@ -1,11 +1,13 @@
 package bj4.yhh.workout;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -87,6 +89,17 @@ public class WorkoutActivity extends AppCompatActivity
             Log.d(TAG, "requestCode: " + requestCode + ", resultCode: " + resultCode);
         }
         if (REQUEST_ADD_TRAIN_DATA == requestCode) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (mService == null) return;
+                try {
+                    if (DEBUG) {
+                        Log.d(TAG, "mService.addTrainData");
+                    }
+                    mService.addTrainData(null);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

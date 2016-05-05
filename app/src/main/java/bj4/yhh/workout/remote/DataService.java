@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import bj4.yhh.workout.data.IDataService;
 import bj4.yhh.workout.data.TrainData;
@@ -25,7 +26,9 @@ public class DataService extends Service {
 
         @Override
         public void addTrainData(TrainData data) throws RemoteException {
-
+            if (DEBUG) {
+                Log.d(TAG, "addTrainData");
+            }
         }
     };
 
