@@ -8,4 +8,5 @@
     <string name="activity_add_train_data_title">Add train data</string>
     <string name="activity_add_train_data_workout_name_hint">Workout name</string>
     <string name="activity_add_train_data_intensity_title">Intensity</string>
+    <string name="activity_add_train_data_date_picker_text">Pick a date</string>
 </resources>
