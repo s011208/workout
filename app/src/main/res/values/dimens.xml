@@ -6,4 +6,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- textview background-->
+    <dimen name="textview_bg_horizontal_padding">8dp</dimen>
+    <dimen name="textview_bg_vertical_padding">8dp</dimen>
+    <dimen name="textview_bg_corner">8dp</dimen>
+    <dimen name="textview_bg_stroke_width">2dp</dimen>
 </resources>

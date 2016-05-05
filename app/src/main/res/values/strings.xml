@@ -6,4 +6,5 @@
 
     <!-- add train data -->
     <string name="activity_add_train_data_title">Add train data</string>
+    <string name="activity_add_train_data_workout_name_hint">Workout name</string>
 </resources>
