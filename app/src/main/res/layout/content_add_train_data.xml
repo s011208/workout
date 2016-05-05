@@ -51,7 +51,7 @@
         <ListView
             android:id="@+id/intensity_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/activity_add_train_data_list_height"
             android:divider="@drawable/content_add_train_data_vertical_divider"></ListView>
     </LinearLayout>
 </ScrollView>

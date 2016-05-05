@@ -15,7 +15,7 @@
         android:background="@drawable/textview_bg_stroke"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:hint="@string/activity_add_train_data_workout_name_hint"
+        android:hint="@string/activity_add_train_data_intensity"
         android:inputType="numberSigned"
         android:lines="1"
         android:textColor="@color/colorText"
@@ -30,7 +30,7 @@
         android:background="@drawable/textview_bg_stroke"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:hint="@string/activity_add_train_data_workout_name_hint"
+        android:hint="@string/activity_add_train_data_unit"
         android:lines="1"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorTextHint" />
@@ -44,7 +44,7 @@
         android:background="@drawable/textview_bg_stroke"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:hint="@string/activity_add_train_data_workout_name_hint"
+        android:hint="@string/activity_add_train_data_times"
         android:inputType="numberSigned"
         android:lines="1"
         android:textColor="@color/colorText"
@@ -52,10 +52,11 @@
 
     <ImageView
         android:id="@+id/remove_button"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_list_item_remove_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside" />
+        android:layout_gravity="center"
+        android:contentDescription="@string/activity_add_train_data_remove_column"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_list_item_remove_24dp" />
 
 </LinearLayout>

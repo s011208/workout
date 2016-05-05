@@ -13,6 +13,8 @@ import bj4.yhh.workout.utilities.Utility;
  * Created by yenhsunhuang on 2016/5/5.
  */
 public class AddTrainDataActivity extends Activity {
+    private static final boolean FULLY_EXPAND_LIST = false;
+
     private TextView mDatePicker;
     private ListView mIntensityDataContainer;
     private TextView mAddMoreIntensity;
@@ -40,16 +42,18 @@ public class AddTrainDataActivity extends Activity {
         mIntensityDataContainer = (ListView) findViewById(R.id.intensity_container);
         mAddTrainDataIntensityAdapter = new AddTrainDataIntensityAdapter(AddTrainDataActivity.this);
         mIntensityDataContainer.setAdapter(mAddTrainDataIntensityAdapter);
-        mIntensityDataContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                if (mIntensityDataContainer.getViewTreeObserver().isAlive()) {
-                    mIntensityDataContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (FULLY_EXPAND_LIST) {
+            mIntensityDataContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    if (mIntensityDataContainer.getViewTreeObserver().isAlive()) {
+                        mIntensityDataContainer.getViewTreeObserver().removeOnPreDrawListener(this);
+                    }
+                    Utility.setListViewHeightBasedOnChildren(mIntensityDataContainer);
+                    return false;
                 }
-                Utility.setListViewHeightBasedOnChildren(mIntensityDataContainer);
-                return false;
-            }
-        });
+            });
+        }
         mAddMoreIntensity = (TextView) getLayoutInflater().inflate(R.layout.content_add_train_data_intensity_footer, null);
         mAddMoreIntensity.setOnClickListener(new View.OnClickListener() {
             @Override

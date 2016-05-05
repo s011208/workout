@@ -10,4 +10,8 @@
     <string name="activity_add_train_data_intensity_title">Intensity</string>
     <string name="activity_add_train_data_date_picker_text">Pick a date</string>
     <string name="activity_add_train_data_add_more_intensity">Add more intensities</string>
+    <string name="activity_add_train_data_intensity">intensity</string>
+    <string name="activity_add_train_data_unit">unit</string>
+    <string name="activity_add_train_data_times">times</string>
+    <string name="activity_add_train_data_remove_column">Remove column</string>
 </resources>
