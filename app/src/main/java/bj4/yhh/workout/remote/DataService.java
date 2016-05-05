@@ -22,6 +22,11 @@ public class DataService extends Service {
         public TrainData[] getAllTrainData() throws RemoteException {
             return new TrainData[0];
         }
+
+        @Override
+        public void addTrainData(TrainData data) throws RemoteException {
+
+        }
     };
 
     @Override

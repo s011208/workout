@@ -1,25 +1,64 @@
 package bj4.yhh.workout;
 
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import bj4.yhh.workout.data.IDataService;
+import bj4.yhh.workout.remote.DataService;
+import bj4.yhh.workout.utilities.Utility;
 
 public class WorkoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "WorkoutActivity";
+    private static final boolean DEBUG = Utility.DEBUG;
+
+    private static final int REQUEST_ADD_TRAIN_DATA = 1;
+
+    private IDataService mService;
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = IDataService.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
+        initComponents();
+        bindService(new Intent(WorkoutActivity.this, DataService.class), mServiceConnection, Service.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+    }
+
+    private void initComponents() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -27,8 +66,8 @@ public class WorkoutActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent startIntent = new Intent(WorkoutActivity.this, AddTrainDataActivity.class);
+                startActivityForResult(startIntent, REQUEST_ADD_TRAIN_DATA);
             }
         });
 
@@ -40,6 +79,15 @@ public class WorkoutActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (DEBUG) {
+            Log.d(TAG, "requestCode: " + requestCode + ", resultCode: " + resultCode);
+        }
+        if (REQUEST_ADD_TRAIN_DATA == requestCode) {
+        }
     }
 
     @Override
