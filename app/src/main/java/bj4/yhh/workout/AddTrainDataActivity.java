@@ -10,7 +10,6 @@ public class AddTrainDataActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setResult(Activity.RESULT_OK);
-        finish();
+        setContentView(R.layout.activity_add_train_data);
     }
 }
