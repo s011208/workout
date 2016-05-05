@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -23,14 +24,6 @@ public class AddTrainDataIntensityAdapter extends BaseAdapter {
     public AddTrainDataIntensityAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mIntensityData.add(new IntensityData(0, 0, "kg"));
-        mIntensityData.add(new IntensityData(-1, -1, "lb"));
-        mIntensityData.add(new IntensityData(-1, -1, "kb"));
-        mIntensityData.add(new IntensityData(-1, -1, "km"));
-        mIntensityData.add(new IntensityData(0, 0, "kg"));
-        mIntensityData.add(new IntensityData(-1, -1, "lb"));
-        mIntensityData.add(new IntensityData(-1, -1, "kb"));
-        mIntensityData.add(new IntensityData(-1, -1, "km"));
         mIntensityData.add(new IntensityData(0, 0, "kg"));
         mIntensityData.add(new IntensityData(-1, -1, "lb"));
         mIntensityData.add(new IntensityData(-1, -1, "kb"));
@@ -57,7 +50,7 @@ public class AddTrainDataIntensityAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -65,6 +58,7 @@ public class AddTrainDataIntensityAdapter extends BaseAdapter {
             holder.mIntensity = (EditText) convertView.findViewById(R.id.intensity);
             holder.mUnit = (EditText) convertView.findViewById(R.id.unit);
             holder.mTimes = (EditText) convertView.findViewById(R.id.times);
+            holder.mRemoveButton = (ImageView) convertView.findViewById(R.id.remove_button);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -73,10 +67,22 @@ public class AddTrainDataIntensityAdapter extends BaseAdapter {
         holder.mIntensity.setText(String.valueOf(item.getIntensity()));
         holder.mUnit.setText(item.getUnit());
         holder.mTimes.setText(String.valueOf(item.getTimes()));
+        holder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIntensityData.remove(position);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
     }
 
     private static class ViewHolder {
         EditText mIntensity, mTimes, mUnit;
+        ImageView mRemoveButton;
+    }
+
+    public void addOneMore() {
+        mIntensityData.add(new IntensityData(0, 0, "kg"));
     }
 }

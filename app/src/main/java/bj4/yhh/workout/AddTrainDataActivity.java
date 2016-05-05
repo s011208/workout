@@ -15,6 +15,7 @@ import bj4.yhh.workout.utilities.Utility;
 public class AddTrainDataActivity extends Activity {
     private TextView mDatePicker;
     private ListView mIntensityDataContainer;
+    private TextView mAddMoreIntensity;
     private AddTrainDataIntensityAdapter mAddTrainDataIntensityAdapter;
 
     @Override
@@ -49,5 +50,14 @@ public class AddTrainDataActivity extends Activity {
                 return false;
             }
         });
+        mAddMoreIntensity = (TextView) getLayoutInflater().inflate(R.layout.content_add_train_data_intensity_footer, null);
+        mAddMoreIntensity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAddTrainDataIntensityAdapter.addOneMore();
+                mAddTrainDataIntensityAdapter.notifyDataSetChanged();
+            }
+        });
+        mIntensityDataContainer.addFooterView(mAddMoreIntensity);
     }
 }
