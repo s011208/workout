@@ -53,5 +53,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_add_train_data_list_height"></android.support.v7.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/intensity_add_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textview_bg_solid"
+            android:gravity="center"
+            android:text="@string/activity_add_train_data_add_more_intensity"
+            android:textColor="@color/colorTextInverse" />
     </LinearLayout>
 </ScrollView>

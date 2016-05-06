@@ -2,7 +2,6 @@ package bj4.yhh.workout.recycler.adapters.addTrainData;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,5 +61,10 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     @Override
     public int getItemCount() {
         return mIntensityData.size();
+    }
+
+    public void addNewItem() {
+        mIntensityData.add(new IntensityData(0, 0, "kg"));
+        notifyItemInserted(mIntensityData.size());
     }
 }

@@ -18,7 +18,7 @@ public class AddTrainDataActivity extends Activity {
 
     private TextView mDatePicker;
     private RecyclerView mIntensityDataContainer;
-    private RecyclerView.Adapter mAddTrainDataAdapter;
+    private AddTrainDataAdapter mAddTrainDataAdapter;
     private TextView mAddMoreIntensity;
 
     @Override
@@ -48,7 +48,12 @@ public class AddTrainDataActivity extends Activity {
         mIntensityDataContainer.setItemAnimator(new DefaultItemAnimator());
         mIntensityDataContainer.setHasFixedSize(true);
 
-        mAddMoreIntensity = (TextView) getLayoutInflater().inflate(R.layout.content_add_train_data_intensity_footer, null);
-
+        mAddMoreIntensity = (TextView) findViewById(R.id.intensity_add_more);
+        mAddMoreIntensity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAddTrainDataAdapter.addNewItem();
+            }
+        });
     }
 }
