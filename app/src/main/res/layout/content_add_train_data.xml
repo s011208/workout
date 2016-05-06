@@ -48,10 +48,10 @@
                 android:textColor="@color/colorTextInverse" />
         </RelativeLayout>
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/intensity_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_add_train_data_list_height"
-            android:divider="@drawable/content_add_train_data_vertical_divider"></ListView>
+            android:layout_height="@dimen/activity_add_train_data_list_height"></android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
 </ScrollView>

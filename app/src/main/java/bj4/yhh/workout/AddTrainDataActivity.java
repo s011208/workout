@@ -2,23 +2,24 @@ package bj4.yhh.workout;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import bj4.yhh.workout.utilities.Utility;
+import bj4.yhh.workout.recycler.adapters.addTrainData.AddTrainDataAdapter;
+import bj4.yhh.workout.views.VerticalSpaceItemDecoration;
 
 /**
  * Created by yenhsunhuang on 2016/5/5.
  */
 public class AddTrainDataActivity extends Activity {
-    private static final boolean FULLY_EXPAND_LIST = false;
 
     private TextView mDatePicker;
-    private ListView mIntensityDataContainer;
+    private RecyclerView mIntensityDataContainer;
+    private RecyclerView.Adapter mAddTrainDataAdapter;
     private TextView mAddMoreIntensity;
-    private AddTrainDataIntensityAdapter mAddTrainDataIntensityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +40,15 @@ public class AddTrainDataActivity extends Activity {
     }
 
     private void initIntensityDataContainer() {
-        mIntensityDataContainer = (ListView) findViewById(R.id.intensity_container);
-        mAddTrainDataIntensityAdapter = new AddTrainDataIntensityAdapter(AddTrainDataActivity.this);
-        mIntensityDataContainer.setAdapter(mAddTrainDataIntensityAdapter);
-        if (FULLY_EXPAND_LIST) {
-            mIntensityDataContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    if (mIntensityDataContainer.getViewTreeObserver().isAlive()) {
-                        mIntensityDataContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-                    }
-                    Utility.setListViewHeightBasedOnChildren(mIntensityDataContainer);
-                    return false;
-                }
-            });
-        }
+        mIntensityDataContainer = (RecyclerView) findViewById(R.id.intensity_container);
+        mAddTrainDataAdapter = new AddTrainDataAdapter(AddTrainDataActivity.this);
+        mIntensityDataContainer.setAdapter(mAddTrainDataAdapter);
+        mIntensityDataContainer.addItemDecoration(new VerticalSpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.activity_add_train_data_item_divider_height)));
+        mIntensityDataContainer.setLayoutManager(new LinearLayoutManager(AddTrainDataActivity.this));
+        mIntensityDataContainer.setItemAnimator(new DefaultItemAnimator());
+        mIntensityDataContainer.setHasFixedSize(true);
+
         mAddMoreIntensity = (TextView) getLayoutInflater().inflate(R.layout.content_add_train_data_intensity_footer, null);
-        mAddMoreIntensity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAddTrainDataIntensityAdapter.addOneMore();
-                mAddTrainDataIntensityAdapter.notifyDataSetChanged();
-            }
-        });
-        mIntensityDataContainer.addFooterView(mAddMoreIntensity);
+
     }
 }
