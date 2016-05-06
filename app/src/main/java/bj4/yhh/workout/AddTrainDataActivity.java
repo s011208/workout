@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import bj4.yhh.workout.recycler.adapters.addTrainData.AddTrainDataAdapter;
@@ -16,7 +18,8 @@ import bj4.yhh.workout.views.VerticalSpaceItemDecoration;
  */
 public class AddTrainDataActivity extends Activity {
 
-    private TextView mDatePicker;
+    private EditText mWorkoutName;
+    private TextView mDatePicker, mConfirmOk, mConfirmCancel;
     private RecyclerView mIntensityDataContainer;
     private AddTrainDataAdapter mAddTrainDataAdapter;
     private TextView mAddMoreIntensity;
@@ -29,6 +32,7 @@ public class AddTrainDataActivity extends Activity {
     }
 
     private void initComponents() {
+        mWorkoutName = (EditText) findViewById(R.id.workout_name);
         mDatePicker = (TextView) findViewById(R.id.date_picker);
         mDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +41,23 @@ public class AddTrainDataActivity extends Activity {
             }
         });
         initIntensityDataContainer();
+
+        mConfirmOk = (TextView) findViewById(R.id.confirm_ok);
+        mConfirmOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
+        mConfirmCancel = (TextView) findViewById(R.id.confirm_cancel);
+        mConfirmCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
     }
 
     private void initIntensityDataContainer() {

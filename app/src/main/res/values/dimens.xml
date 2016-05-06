@@ -9,7 +9,6 @@
 
     <!-- activity_add_train_data -->
     <dimen name="activity_add_train_data_item_divider_height">8dp</dimen>
-    <dimen name="activity_add_train_data_list_height">180dp</dimen>
 
     <!-- textview background-->
     <dimen name="textview_bg_horizontal_padding">8dp</dimen>
