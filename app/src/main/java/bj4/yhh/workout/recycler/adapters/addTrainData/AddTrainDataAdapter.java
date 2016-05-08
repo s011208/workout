@@ -39,7 +39,7 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
         String times = "";
         String unit = "";
         if (item.getIntensity() > 0) {
-            intensity = (String.valueOf(item.getIntensity());
+            intensity = String.valueOf(item.getIntensity());
         }
         if (item.getTimes() >= 0) {
             times = String.valueOf(item.getTimes());
