@@ -2,6 +2,7 @@ package bj4.yhh.workout.recycler.adapters.addTrainData;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,7 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     public AddTrainDataAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mIntensityData.add(new IntensityData(0, 0, "kg"));
-        mIntensityData.add(new IntensityData(-1, -1, "lb"));
-        mIntensityData.add(new IntensityData(-1, -1, "kb"));
-        mIntensityData.add(new IntensityData(-1, -1, "km"));
-        mIntensityData.add(new IntensityData(0, 0, "kg"));
-        mIntensityData.add(new IntensityData(-1, -1, "lb"));
-        mIntensityData.add(new IntensityData(-1, -1, "kb"));
-        mIntensityData.add(new IntensityData(-1, -1, "km"));
+        mIntensityData.add(new IntensityData(-1, -1, ""));
     }
 
     @Override
@@ -41,9 +35,21 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     @Override
     public void onBindViewHolder(BaseHolder holder, final int position) {
         final IntensityData item = getItem(position);
-        holder.mIntensity.setText(String.valueOf(item.getIntensity()));
-        holder.mTimes.setText(String.valueOf(item.getTimes()));
-        holder.mUnit.setText(String.valueOf(item.getUnit()));
+        String intensity = "";
+        String times = "";
+        String unit = "";
+        if (item.getIntensity() > 0) {
+            intensity = (String.valueOf(item.getIntensity());
+        }
+        if (item.getTimes() >= 0) {
+            times = String.valueOf(item.getTimes());
+        }
+        if (!TextUtils.isEmpty(item.getUnit())) {
+            unit = item.getUnit();
+        }
+        holder.mIntensity.setText(intensity);
+        holder.mTimes.setText(times);
+        holder.mUnit.setText(unit);
         holder.mRemoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
