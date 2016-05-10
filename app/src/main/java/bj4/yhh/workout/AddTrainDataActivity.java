@@ -5,18 +5,20 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import bj4.yhh.workout.recycler.adapters.addTrainData.AddTrainDataAdapter;
+import bj4.yhh.workout.utilities.Utility;
 import bj4.yhh.workout.views.VerticalSpaceItemDecoration;
 
 /**
  * Created by yenhsunhuang on 2016/5/5.
  */
 public class AddTrainDataActivity extends Activity {
+    private static final String TAG = "AddTrainDataActivity";
+    private static final boolean DEBUG = Utility.DEBUG;
 
     private EditText mWorkoutName;
     private TextView mDatePicker, mConfirmOk, mConfirmCancel;
