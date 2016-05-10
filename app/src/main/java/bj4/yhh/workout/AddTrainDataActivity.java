@@ -48,8 +48,13 @@ public class AddTrainDataActivity extends Activity {
         mConfirmOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_OK);
-                finish();
+                if (mAddTrainDataAdapter.validData()) {
+                    mAddTrainDataAdapter.collectData();
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                } else {
+
+                }
             }
         });
         mConfirmCancel = (TextView) findViewById(R.id.confirm_cancel);

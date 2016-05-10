@@ -70,7 +70,15 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     }
 
     public void addNewItem() {
-        mIntensityData.add(new IntensityData(0, 0, "kg"));
+        mIntensityData.add(new IntensityData(-1, -1, ""));
         notifyItemInserted(mIntensityData.size());
+    }
+
+    public boolean validData() {
+        return false;
+    }
+
+    public void collectData() {
+
     }
 }
