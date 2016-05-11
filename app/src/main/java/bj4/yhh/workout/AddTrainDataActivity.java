@@ -132,10 +132,9 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
         ArrayList<IntensityData> dataList = new ArrayList<>();
         for (int i = 0; i < mAddTrainDataAdapter.getItemCount(); ++i) {
             IntensityData data = mAddTrainDataAdapter.getItem(i);
-            data.setUnit(mUnit.getText().toString());
             dataList.add(data);
         }
-        TrainData data = new TrainData(mWorkoutName.getText().toString(), dataList);
+        TrainData data = new TrainData(mWorkoutName.getText().toString(), dataList, mUnit.getText().toString());
         if (DEBUG) {
             Log.d(TAG, "data: " + data.toString());
         }

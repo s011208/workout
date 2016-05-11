@@ -1,5 +1,6 @@
 package bj4.yhh.workout.data;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -26,6 +27,7 @@ public class TrainData implements Parcelable {
     public static final String LAP_TIME = "lap_time";
     public static final String STATUS = "status";
     public static final String INTENSITY_DATA = "intensity_data";
+    public static final String UNIT = "unit";
 
     private long mId;
 
@@ -33,16 +35,35 @@ public class TrainData implements Parcelable {
     private String mTrainImageSource = "";
     private String mTotalTime = "";
     private String mLapTime = "";
+    private String mUnit = "";
     private int mStatus = STATUS_NONE;
     private final ArrayList<IntensityData> mIntensityData = new ArrayList<>();
 
-    public TrainData(String trainTitle, ArrayList<IntensityData> data) {
+    public TrainData(String trainTitle, ArrayList<IntensityData> data, String unit) {
         mTrainTitle = trainTitle;
         mIntensityData.addAll(data);
+        mUnit = unit;
     }
 
     public TrainData(String rawJson) {
         fromJson(rawJson);
+    }
+
+    public ContentValues toContentValues() {
+        ContentValues cv = new ContentValues();
+        cv.put(ID, getId());
+        cv.put(TRAIN_TITLE, getTrainTitle());
+        cv.put(TRAIN_IMAGE_SOURCE, getTrainImageSource());
+        cv.put(TOTAL_TIME, getTotalTime());
+        cv.put(LAP_TIME, getLapTime());
+        cv.put(STATUS, getStatus());
+        cv.put(UNIT, getUnit());
+        JSONArray jArray = new JSONArray();
+        for (IntensityData data : getIntensityData()) {
+            jArray.put(data.toJson());
+        }
+        cv.put(INTENSITY_DATA, jArray.toString());
+        return cv;
     }
 
     private void fromJson(String rawJson) {
@@ -54,6 +75,7 @@ public class TrainData implements Parcelable {
             setTotalTime(json.getString(TOTAL_TIME));
             setTrainImageSource(json.getString(TRAIN_IMAGE_SOURCE));
             setTrainTitle(json.getString(TRAIN_TITLE));
+            setUnit(json.getString(UNIT));
             JSONArray jArray = json.getJSONArray(INTENSITY_DATA);
             for (int i = 0; i < jArray.length(); ++i) {
                 mIntensityData.add(new IntensityData(jArray.getJSONObject(i)));
@@ -115,6 +137,16 @@ public class TrainData implements Parcelable {
         this.mStatus = mStatus;
     }
 
+
+    public String getUnit() {
+        return mUnit;
+    }
+
+    public void setUnit(String mUnit) {
+        this.mUnit = mUnit;
+    }
+
+
     public ArrayList<IntensityData> getIntensityData() {
         return mIntensityData;
     }
@@ -129,6 +161,7 @@ public class TrainData implements Parcelable {
             json.put(TOTAL_TIME, getTotalTime());
             json.put(LAP_TIME, getLapTime());
             json.put(STATUS, getStatus());
+            json.put(UNIT, getUnit());
             JSONArray jArray = new JSONArray();
             for (IntensityData data : getIntensityData()) {
                 jArray.put(data.toJson());

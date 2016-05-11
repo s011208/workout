@@ -29,6 +29,7 @@ public class DataService extends Service {
             if (DEBUG) {
                 Log.d(TAG, "addTrainData, data: " + data);
             }
+
         }
     };
 

@@ -9,20 +9,17 @@ import org.json.JSONObject;
 public class IntensityData {
     private static final String INTENSITY = "intensity";
     private static final String TIMES = "times";
-    private static final String UNIT = "unit";
 
     private int mIntensity;
     private int mTimes;
-    private String mUnit;
 
-    public IntensityData(int intensity, int times, String unit) {
+    public IntensityData(int intensity, int times) {
         mIntensity = intensity;
         mTimes = times;
-        mUnit = unit;
     }
 
     public IntensityData(JSONObject json) throws JSONException {
-        this(json.getInt(INTENSITY), json.getInt(TIMES), json.getString(UNIT));
+        this(json.getInt(INTENSITY), json.getInt(TIMES));
     }
 
     public int getIntensity() {
@@ -41,20 +38,11 @@ public class IntensityData {
         this.mTimes = mTimes;
     }
 
-    public String getUnit() {
-        return mUnit;
-    }
-
-    public void setUnit(String mUnit) {
-        this.mUnit = mUnit;
-    }
-
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         try {
             json.put(INTENSITY, mIntensity);
             json.put(TIMES, mTimes);
-            json.put(UNIT, mUnit);
         } catch (JSONException e) {
             e.printStackTrace();
         }

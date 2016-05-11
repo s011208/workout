@@ -26,7 +26,7 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     public AddTrainDataAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mIntensityData.add(new IntensityData(-1, -1, ""));
+        mIntensityData.add(new IntensityData(-1, -1));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
     }
 
     public void addNewItem() {
-        mIntensityData.add(new IntensityData(-1, -1, ""));
+        mIntensityData.add(new IntensityData(-1, -1));
         notifyItemInserted(mIntensityData.size());
     }
 
