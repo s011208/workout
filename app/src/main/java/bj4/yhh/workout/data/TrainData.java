@@ -29,7 +29,7 @@ public class TrainData implements Parcelable {
     public static final String INTENSITY_DATA = "intensity_data";
     public static final String UNIT = "unit";
 
-    private long mId;
+    private long mId = -1;
 
     private String mTrainTitle = "";
     private String mTrainImageSource = "";
@@ -51,7 +51,9 @@ public class TrainData implements Parcelable {
 
     public ContentValues toContentValues() {
         ContentValues cv = new ContentValues();
-        cv.put(ID, getId());
+        if (getId() != -1) {
+            cv.put(ID, getId());
+        }
         cv.put(TRAIN_TITLE, getTrainTitle());
         cv.put(TRAIN_IMAGE_SOURCE, getTrainImageSource());
         cv.put(TOTAL_TIME, getTotalTime());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,15 @@ import java.util.ArrayList;
 import bj4.yhh.workout.R;
 import bj4.yhh.workout.data.IntensityData;
 import bj4.yhh.workout.recycler.adapters.addTrainData.holders.BaseHolder;
+import bj4.yhh.workout.utilities.Utility;
 
 /**
  * Created by User on 2016/5/6.
  */
 public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
+
+    private static final String TAG = "AddTrainDataAdapter";
+    private static final boolean DEBUG = Utility.DEBUG;
     private final Context mContext;
     private final LayoutInflater mInflater;
     private final ArrayList<IntensityData> mIntensityData = new ArrayList<>();
@@ -109,6 +114,9 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
 
     public boolean validData() {
         for (IntensityData data : mIntensityData) {
+            if (DEBUG) {
+                Log.d(TAG, "data.getIntensity(): " + data.getIntensity() + ",  data.getTimes(): " + data.getTimes());
+            }
             if (data.getIntensity() < 0 || data.getTimes() < 0) {
                 return false;
             }

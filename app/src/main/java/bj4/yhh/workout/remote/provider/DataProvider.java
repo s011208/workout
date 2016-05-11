@@ -100,6 +100,7 @@ public class DataProvider extends ContentProvider {
                     + TrainData.INTENSITY_DATA + " TEXT NOT NULL,"
                     + TrainData.LAP_TIME + " TEXT,"
                     + TrainData.TOTAL_TIME + " TEXT,"
+                    + TrainData.UNIT + " TEXT NOT NULL,"
                     + TrainData.TRAIN_IMAGE_SOURCE + " TEXT,"
                     + TrainData.TRAIN_TITLE + " TEXT NOT NULL,"
                     + TrainData.STATUS + " INTEGER)");

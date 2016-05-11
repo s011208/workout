@@ -105,6 +105,9 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
             return false;
         }
         if (!mAddTrainDataAdapter.validData()) {
+            if (DEBUG) {
+                Log.d(TAG, "mAddTrainDataAdapter invalid");
+            }
             return false;
         }
         return true;
