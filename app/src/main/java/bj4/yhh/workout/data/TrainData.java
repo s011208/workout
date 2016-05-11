@@ -1,6 +1,7 @@
 package bj4.yhh.workout.data;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -206,4 +207,40 @@ public class TrainData implements Parcelable {
             return new TrainData[size];
         }
     };
+
+    public static ArrayList<TrainData> getFromCursor(Cursor raw) {
+        ArrayList<TrainData> rtn = new ArrayList<>();
+        if (raw == null) return rtn;
+        try {
+            final int indexOfId = raw.getColumnIndex(TrainData.ID);
+            final int indexOfTrainTitle = raw.getColumnIndex(TrainData.TRAIN_TITLE);
+            final int indexOfTrainImageSource = raw.getColumnIndex(TrainData.TRAIN_IMAGE_SOURCE);
+            final int indexOfTotalTime = raw.getColumnIndex(TrainData.TOTAL_TIME);
+            final int indexOfLapTime = raw.getColumnIndex(TrainData.LAP_TIME);
+            final int indexOfStatus = raw.getColumnIndex(TrainData.STATUS);
+            final int indexOfIntensiyData = raw.getColumnIndex(TrainData.INTENSITY_DATA);
+            final int indexOfUnit = raw.getColumnIndex(TrainData.UNIT);
+            while (raw.moveToNext()) {
+                long id = raw.getLong(indexOfId);
+                String trainTitle = raw.getString(indexOfTrainTitle);
+                String trainTrainImageSource = raw.getString(indexOfTrainImageSource);
+                String trainTotalTime = raw.getString(indexOfTotalTime);
+                String trainLapTime = raw.getString(indexOfLapTime);
+                String trainIntensityData = raw.getString(indexOfIntensiyData);
+                String trainUnit = raw.getString(indexOfUnit);
+                int status = raw.getInt(indexOfStatus);
+                ArrayList<IntensityData> intensity = IntensityData.fromJsonArray(trainIntensityData);
+                TrainData trainData = new TrainData(trainTitle, intensity, trainUnit);
+                trainData.setId(id);
+                trainData.setTrainImageSource(trainTrainImageSource);
+                trainData.setTotalTime(trainTotalTime);
+                trainData.setLapTime(trainLapTime);
+                trainData.setStatus(status);
+                rtn.add(trainData);
+            }
+        } finally {
+            raw.close();
+        }
+        return rtn;
+    }
 }

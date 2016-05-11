@@ -1,7 +1,10 @@
 package bj4.yhh.workout.data;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by yenhsunhuang on 2016/5/4.
@@ -58,6 +61,19 @@ public class IntensityData {
         IntensityData rtn = null;
         try {
             rtn = new IntensityData(new JSONObject(raw));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rtn;
+    }
+
+    public static ArrayList<IntensityData> fromJsonArray(String raw) {
+        ArrayList<IntensityData> rtn = new ArrayList<>();
+        try {
+            JSONArray array = new JSONArray(raw);
+            for (int i = 0; i < array.length(); ++i) {
+                rtn.add(IntensityData.fromJson(array.getString(i)));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

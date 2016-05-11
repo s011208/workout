@@ -56,6 +56,16 @@ public class DataService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        reloadAllTrainData();
+    }
+
+    private void reloadAllTrainData() {
+        mData.clear();
+        mData.addAll(TrainData.getFromCursor(getContentResolver().query(DataProvider.URI_TRAIN_DATA, null, null, null, null)));
+        if (DEBUG) {
+            for (TrainData data : mData)
+                Log.d(TAG, "data: " + data.toString());
+        }
     }
 
     @Override
