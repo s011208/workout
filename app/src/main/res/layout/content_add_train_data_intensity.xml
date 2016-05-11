@@ -11,7 +11,7 @@
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_weight="@integer/content_add_train_data_intensity_intensity_weight"
         android:background="@drawable/textview_bg_stroke"
         android:ellipsize="end"
         android:gravity="center_horizontal"
@@ -26,7 +26,7 @@
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="@integer/content_add_train_data_intensity_times_weight"
         android:background="@drawable/textview_bg_stroke"
         android:ellipsize="end"
         android:gravity="center_horizontal"
@@ -39,9 +39,9 @@
     <ImageView
         android:id="@+id/remove_button"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="@integer/content_add_train_data_intensity_remove_weight"
         android:contentDescription="@string/activity_add_train_data_remove_column"
         android:scaleType="centerInside"
         android:src="@drawable/ic_list_item_remove_24dp" />

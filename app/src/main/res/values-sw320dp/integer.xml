@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="content_add_train_data_intensity_intensity_weight">2</integer>
+    <integer name="content_add_train_data_intensity_times_weight">2</integer>
+    <integer name="content_add_train_data_intensity_remove_weight">1</integer>
+</resources>
