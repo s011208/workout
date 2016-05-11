@@ -27,7 +27,7 @@ public class DataService extends Service {
         @Override
         public void addTrainData(TrainData data) throws RemoteException {
             if (DEBUG) {
-                Log.d(TAG, "addTrainData");
+                Log.d(TAG, "addTrainData, data: " + data);
             }
         }
     };

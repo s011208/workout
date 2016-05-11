@@ -11,13 +11,12 @@ import bj4.yhh.workout.R;
  * Created by User on 2016/5/6.
  */
 public class BaseHolder extends RecyclerView.ViewHolder {
-    public EditText mIntensity, mTimes, mUnit;
+    public EditText mIntensity, mTimes;
     public ImageView mRemoveButton;
 
     public BaseHolder(View itemView) {
         super(itemView);
         mIntensity = (EditText) itemView.findViewById(R.id.intensity);
-        mUnit = (EditText) itemView.findViewById(R.id.unit);
         mTimes = (EditText) itemView.findViewById(R.id.times);
         mRemoveButton = (ImageView) itemView.findViewById(R.id.remove_button);
     }

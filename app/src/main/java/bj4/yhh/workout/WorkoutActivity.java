@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import bj4.yhh.workout.data.IDataService;
+import bj4.yhh.workout.data.TrainData;
 import bj4.yhh.workout.remote.DataService;
 import bj4.yhh.workout.utilities.Utility;
 
@@ -30,6 +31,7 @@ public class WorkoutActivity extends AppCompatActivity
     private static final boolean DEBUG = Utility.DEBUG;
 
     private static final int REQUEST_ADD_TRAIN_DATA = 1;
+    public static final String INTENT_TRAIN_DATA = "train_data";
 
     private IDataService mService;
 
@@ -90,12 +92,16 @@ public class WorkoutActivity extends AppCompatActivity
         }
         if (REQUEST_ADD_TRAIN_DATA == requestCode) {
             if (resultCode == Activity.RESULT_OK) {
+                if (data == null) return;
                 if (mService == null) return;
                 try {
+                    String rawData = data.getStringExtra(INTENT_TRAIN_DATA);
+                    if (rawData == null) return;
+                    TrainData trainData = new TrainData(rawData);
                     if (DEBUG) {
-                        Log.d(TAG, "mService.addTrainData");
+                        Log.d(TAG, "mService.addTrainData: " + trainData.toString());
                     }
-                    mService.addTrainData(null);
+                    mService.addTrainData(trainData);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

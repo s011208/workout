@@ -14,4 +14,8 @@
     <string name="activity_add_train_data_unit">unit</string>
     <string name="activity_add_train_data_times">times</string>
     <string name="activity_add_train_data_remove_column">Remove column</string>
+    <string name="activity_add_train_data_toast_fill_up_workout_name">Please fill up workout name</string>
+    <string name="activity_add_train_data_toast_fill_up_intensity_unit">Please fill up intensity unit</string>
+    <string name="activity_add_train_data_toast_pick_up_a_date">Please pick up a date</string>
+    <string name="activity_add_train_data_toast_cannot_remove_last_item">Can not remove the last item</string>
 </resources>

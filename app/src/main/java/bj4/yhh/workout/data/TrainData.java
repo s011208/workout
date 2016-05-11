@@ -29,16 +29,38 @@ public class TrainData implements Parcelable {
 
     private long mId;
 
-    private String mTrainTitle;
-    private String mTrainImageSource;
-    private String mTotalTime;
-    private String mLapTime;
-    private int mStatus;
+    private String mTrainTitle = "";
+    private String mTrainImageSource = "";
+    private String mTotalTime = "";
+    private String mLapTime = "";
+    private int mStatus = STATUS_NONE;
     private final ArrayList<IntensityData> mIntensityData = new ArrayList<>();
 
     public TrainData(String trainTitle, ArrayList<IntensityData> data) {
         mTrainTitle = trainTitle;
         mIntensityData.addAll(data);
+    }
+
+    public TrainData(String rawJson) {
+        fromJson(rawJson);
+    }
+
+    private void fromJson(String rawJson) {
+        try {
+            JSONObject json = new JSONObject(rawJson);
+            setId(json.getLong(ID));
+            setLapTime(json.getString(LAP_TIME));
+            setStatus(json.getInt(STATUS));
+            setTotalTime(json.getString(TOTAL_TIME));
+            setTrainImageSource(json.getString(TRAIN_IMAGE_SOURCE));
+            setTrainTitle(json.getString(TRAIN_TITLE));
+            JSONArray jArray = json.getJSONArray(INTENSITY_DATA);
+            for (int i = 0; i < jArray.length(); ++i) {
+                mIntensityData.add(new IntensityData(jArray.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private TrainData(Parcel source) {
@@ -134,21 +156,7 @@ public class TrainData implements Parcelable {
     }
 
     public void readFromParcel(Parcel source) {
-        try {
-            JSONObject json = new JSONObject(source.readString());
-            setId(json.getLong(ID));
-            setLapTime(json.getString(LAP_TIME));
-            setStatus(json.getInt(STATUS));
-            setTotalTime(json.getString(TOTAL_TIME));
-            setTrainImageSource(json.getString(TRAIN_IMAGE_SOURCE));
-            setTrainTitle(json.getString(TRAIN_TITLE));
-            JSONArray jArray = json.getJSONArray(INTENSITY_DATA);
-            for (int i = 0; i < jArray.length(); ++i) {
-                mIntensityData.add(new IntensityData(jArray.getJSONObject(i)));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        fromJson(source.readString());
     }
 
     public static final Parcelable.Creator<TrainData> CREATOR = new Parcelable.Creator<TrainData>() {
