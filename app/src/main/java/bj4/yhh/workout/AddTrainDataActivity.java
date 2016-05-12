@@ -52,6 +52,22 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
 
     private void initComponents() {
         mWorkoutName = (AutoCompleteTextView) findViewById(R.id.workout_name);
+        mWorkoutName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                loadWorkoutNameAdapterAsync(s.toString());
+            }
+        });
         mUnit = (AutoCompleteTextView) findViewById(R.id.unit);
         mUnit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -214,6 +230,15 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
                     }
                 }
                 mUnit.setAdapter(adapter);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void loadWorkoutNameAdapterAsync(final String workName) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
