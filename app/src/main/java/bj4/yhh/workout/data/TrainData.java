@@ -218,7 +218,7 @@ public class TrainData implements Parcelable {
             final int indexOfTotalTime = raw.getColumnIndex(TrainData.TOTAL_TIME);
             final int indexOfLapTime = raw.getColumnIndex(TrainData.LAP_TIME);
             final int indexOfStatus = raw.getColumnIndex(TrainData.STATUS);
-            final int indexOfIntensiyData = raw.getColumnIndex(TrainData.INTENSITY_DATA);
+            final int indexOfIntensityData = raw.getColumnIndex(TrainData.INTENSITY_DATA);
             final int indexOfUnit = raw.getColumnIndex(TrainData.UNIT);
             while (raw.moveToNext()) {
                 long id = raw.getLong(indexOfId);
@@ -226,7 +226,7 @@ public class TrainData implements Parcelable {
                 String trainTrainImageSource = raw.getString(indexOfTrainImageSource);
                 String trainTotalTime = raw.getString(indexOfTotalTime);
                 String trainLapTime = raw.getString(indexOfLapTime);
-                String trainIntensityData = raw.getString(indexOfIntensiyData);
+                String trainIntensityData = raw.getString(indexOfIntensityData);
                 String trainUnit = raw.getString(indexOfUnit);
                 int status = raw.getInt(indexOfStatus);
                 ArrayList<IntensityData> intensity = IntensityData.fromJsonArray(trainIntensityData);

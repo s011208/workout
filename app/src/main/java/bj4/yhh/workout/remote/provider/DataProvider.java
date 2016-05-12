@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import bj4.yhh.workout.data.ScheduleDate;
 import bj4.yhh.workout.data.TrainData;
 
 /**
@@ -22,15 +23,19 @@ public class DataProvider extends ContentProvider {
     private static final String AUTHORITY = "bj4.yhh.workout.remote.provider.DataProvider";
 
     private static final String PATTERN_TRAIN_DATA = Database.TABLE_TRAIN_DATA;
+    private static final String PATTERN_SCHEDULE_DATE = Database.TABLE_SCHEDULE_DATE;
 
     private static final int CODE_TRAIN_DATA = 1;
+    private static final int CODE_SCHEDULE_DATE = 2;
 
     public static final Uri URI_TRAIN_DATA = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_TRAIN_DATA);
+    public static final Uri URI_SCHEDULE_DATE = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_SCHEDULE_DATE);
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(AUTHORITY, PATTERN_TRAIN_DATA, CODE_TRAIN_DATA);
+        sUriMatcher.addURI(AUTHORITY, PATTERN_SCHEDULE_DATE, CODE_SCHEDULE_DATE);
     }
 
     @Override
@@ -45,6 +50,9 @@ public class DataProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_TRAIN_DATA:
                 return mDatabase.query(Database.TABLE_TRAIN_DATA, projection, selection, selectionArgs, sortOrder, null, null);
+            case CODE_SCHEDULE_DATE:
+                return mDatabase.query(Database.TABLE_SCHEDULE_DATE, projection, selection, selectionArgs, sortOrder, null, null);
+
         }
         return null;
     }
@@ -61,6 +69,9 @@ public class DataProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_TRAIN_DATA:
                 return ContentUris.withAppendedId(uri, mDatabase.insert(Database.TABLE_TRAIN_DATA, null, values));
+            case CODE_SCHEDULE_DATE:
+                return ContentUris.withAppendedId(uri, mDatabase.insert(Database.TABLE_SCHEDULE_DATE, null, values));
+
         }
         return null;
     }
@@ -70,6 +81,8 @@ public class DataProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_TRAIN_DATA:
                 return mDatabase.delete(Database.TABLE_TRAIN_DATA, selection, selectionArgs);
+            case CODE_SCHEDULE_DATE:
+                return mDatabase.delete(Database.TABLE_SCHEDULE_DATE, selection, selectionArgs);
         }
         return 0;
     }
@@ -79,6 +92,8 @@ public class DataProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_TRAIN_DATA:
                 return mDatabase.update(Database.TABLE_TRAIN_DATA, values, selection, selectionArgs);
+            case CODE_SCHEDULE_DATE:
+                return mDatabase.update(Database.TABLE_SCHEDULE_DATE, values, selection, selectionArgs);
         }
         return 0;
     }
@@ -88,6 +103,7 @@ public class DataProvider extends ContentProvider {
         private static final int DATABASE_VERSION = 1;
 
         private static final String TABLE_TRAIN_DATA = "train_data";
+        private static final String TABLE_SCHEDULE_DATE = "schedule_date";
 
         public Database(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -106,9 +122,20 @@ public class DataProvider extends ContentProvider {
                     + TrainData.STATUS + " INTEGER)");
         }
 
+        private static void createScheduleDateTable(SQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS "
+                    + TABLE_SCHEDULE_DATE + " ("
+                    + ScheduleDate.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + ScheduleDate.TRAIN_DATA_ID + " INTEGER,"
+                    + ScheduleDate.YEAR + " INTEGER,"
+                    + ScheduleDate.MONTH + " INTEGER,"
+                    + ScheduleDate.DAY + " INTEGER)");
+        }
+
         @Override
         public void onCreate(SQLiteDatabase db) {
             createTrainDataTable(db);
+            createScheduleDateTable(db);
         }
 
         @Override
