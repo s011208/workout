@@ -20,7 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Calendar;
+
 import bj4.yhh.workout.data.IDataService;
+import bj4.yhh.workout.data.ScheduleDate;
 import bj4.yhh.workout.data.TrainData;
 import bj4.yhh.workout.remote.DataService;
 import bj4.yhh.workout.utilities.Utility;
@@ -32,6 +35,7 @@ public class WorkoutActivity extends AppCompatActivity
 
     private static final int REQUEST_ADD_TRAIN_DATA = 1;
     public static final String INTENT_TRAIN_DATA = "train_data";
+    public static final String INTENT_DATE = "date";
 
     private IDataService mService;
 
@@ -96,12 +100,22 @@ public class WorkoutActivity extends AppCompatActivity
                 if (mService == null) return;
                 try {
                     String rawData = data.getStringExtra(INTENT_TRAIN_DATA);
-                    if (rawData == null) return;
+                    long date = data.getLongExtra(INTENT_DATE, -1);
+                    if (rawData == null || date == -1) return;
                     TrainData trainData = new TrainData(rawData);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(date);
+                    final int y = calendar.get(Calendar.YEAR);
+                    final int m = calendar.get(Calendar.MONTH);
+                    final int d = calendar.get(Calendar.DAY_OF_MONTH);
                     if (DEBUG) {
                         Log.d(TAG, "mService.addTrainData: " + trainData.toString());
+                        Log.d(TAG, "date: " + y + "." + (m + 1) + "." + d);
                     }
-                    mService.addTrainData(trainData);
+                    ScheduleDate scheduleDate = mService.addTrainData(trainData, y, m, d);
+                    if (DEBUG) {
+                        Log.d(TAG, "scheduleDate: " + scheduleDate);
+                    }
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

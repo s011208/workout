@@ -72,6 +72,7 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
                     } else {
                         Intent intent = new Intent();
                         intent.putExtra(WorkoutActivity.INTENT_TRAIN_DATA, data.toString());
+                        intent.putExtra(WorkoutActivity.INTENT_DATE, mDate);
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                     }

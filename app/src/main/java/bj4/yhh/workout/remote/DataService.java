@@ -2,6 +2,7 @@ package bj4.yhh.workout.remote;
 
 import android.app.Service;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import bj4.yhh.workout.data.IDataService;
+import bj4.yhh.workout.data.ScheduleDate;
 import bj4.yhh.workout.data.TrainData;
 import bj4.yhh.workout.remote.provider.DataProvider;
 import bj4.yhh.workout.utilities.Utility;
@@ -24,32 +26,39 @@ public class DataService extends Service {
     private static final String TAG = "DataService";
     private static final boolean DEBUG = Utility.DEBUG;
 
-    private final ArrayList<TrainData> mData = new ArrayList<>();
+    private final ArrayList<TrainData> mDataLock = new ArrayList<>();
     private final Handler mHandler = new Handler();
 
     private IDataService.Stub mStub = new IDataService.Stub() {
         @Override
         public TrainData[] getAllTrainData() throws RemoteException {
-            return new TrainData[0];
+            synchronized (mDataLock) {
+                return mDataLock.toArray(new TrainData[mDataLock.size()]);
+            }
         }
 
         @Override
-        public void addTrainData(final TrainData data) throws RemoteException {
+        public ScheduleDate addTrainData(final TrainData data, int y, int m, int d) throws RemoteException {
             if (DEBUG) {
                 Log.d(TAG, "addTrainData, data: " + data);
             }
-            if (data == null) return;
+            if (data == null) return null;
             Uri rtn = getContentResolver().insert(DataProvider.URI_TRAIN_DATA, data.toContentValues());
             data.setId(ContentUris.parseId(rtn));
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (DEBUG) {
-                        Log.d(TAG, "add data: " + data.getId());
-                    }
-                    mData.add(data);
-                }
-            });
+            if (DEBUG) {
+                Log.d(TAG, "add data: " + data.getId());
+            }
+            synchronized (mDataLock) {
+                mDataLock.add(data);
+            }
+            ContentValues cv = new ContentValues();
+            cv.put(ScheduleDate.YEAR, y);
+            cv.put(ScheduleDate.MONTH, m);
+            cv.put(ScheduleDate.DAY, d);
+            cv.put(ScheduleDate.TRAIN_DATA_ID, data.getId());
+            rtn = getContentResolver().insert(DataProvider.URI_SCHEDULE_DATE, cv);
+            final long scheduleDateId = ContentUris.parseId(rtn);
+            return new ScheduleDate(scheduleDateId, data.getId(), y, m, d);
         }
     };
 
@@ -60,11 +69,13 @@ public class DataService extends Service {
     }
 
     private void reloadAllTrainData() {
-        mData.clear();
-        mData.addAll(TrainData.getFromCursor(getContentResolver().query(DataProvider.URI_TRAIN_DATA, null, null, null, null)));
-        if (DEBUG) {
-            for (TrainData data : mData)
-                Log.d(TAG, "data: " + data.toString());
+        synchronized (mDataLock) {
+            mDataLock.clear();
+            mDataLock.addAll(TrainData.getFromCursor(getContentResolver().query(DataProvider.URI_TRAIN_DATA, null, null, null, null)));
+            if (DEBUG) {
+                for (TrainData data : mDataLock)
+                    Log.d(TAG, "data: " + data.toString());
+            }
         }
     }
 
