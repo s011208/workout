@@ -24,18 +24,22 @@ public class DataProvider extends ContentProvider {
 
     private static final String PATTERN_TRAIN_DATA = Database.TABLE_TRAIN_DATA;
     private static final String PATTERN_SCHEDULE_DATE = Database.TABLE_SCHEDULE_DATE;
+    private static final String PATTERN_TRAIN_DATA_DISTINCT_UNIT = Database.TABLE_TRAIN_DATA + "/distinct_unit";
 
     private static final int CODE_TRAIN_DATA = 1;
     private static final int CODE_SCHEDULE_DATE = 2;
+    private static final int CODE_TRAIN_DATA_DISTINCT_UNIT = 3;
 
     public static final Uri URI_TRAIN_DATA = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_TRAIN_DATA);
     public static final Uri URI_SCHEDULE_DATE = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_SCHEDULE_DATE);
+    public static final Uri URI_TRAIN_DATA_DISTINCT_UNIT = Uri.parse("content://" + AUTHORITY + "/" + PATTERN_TRAIN_DATA_DISTINCT_UNIT);
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(AUTHORITY, PATTERN_TRAIN_DATA, CODE_TRAIN_DATA);
         sUriMatcher.addURI(AUTHORITY, PATTERN_SCHEDULE_DATE, CODE_SCHEDULE_DATE);
+        sUriMatcher.addURI(AUTHORITY, PATTERN_TRAIN_DATA_DISTINCT_UNIT, CODE_TRAIN_DATA_DISTINCT_UNIT);
     }
 
     @Override
@@ -52,6 +56,8 @@ public class DataProvider extends ContentProvider {
                 return mDatabase.query(Database.TABLE_TRAIN_DATA, projection, selection, selectionArgs, sortOrder, null, null);
             case CODE_SCHEDULE_DATE:
                 return mDatabase.query(Database.TABLE_SCHEDULE_DATE, projection, selection, selectionArgs, sortOrder, null, null);
+            case CODE_TRAIN_DATA_DISTINCT_UNIT:
+                return mDatabase.query(true, Database.TABLE_TRAIN_DATA, new String[]{TrainData.UNIT}, null, null, null, null, null, null);
 
         }
         return null;

@@ -2,14 +2,19 @@ package bj4.yhh.workout;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +24,7 @@ import java.util.Calendar;
 import bj4.yhh.workout.data.IntensityData;
 import bj4.yhh.workout.data.TrainData;
 import bj4.yhh.workout.recycler.adapters.addTrainData.AddTrainDataAdapter;
+import bj4.yhh.workout.remote.provider.DataProvider;
 import bj4.yhh.workout.utilities.Utility;
 import bj4.yhh.workout.views.DatePickDialogFragment;
 import bj4.yhh.workout.views.VerticalSpaceItemDecoration;
@@ -31,7 +37,7 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
     private static final boolean DEBUG = Utility.DEBUG;
 
     private long mDate = System.currentTimeMillis();
-    private EditText mWorkoutName, mUnit;
+    private AutoCompleteTextView mWorkoutName, mUnit;
     private TextView mDatePicker, mConfirmOk, mConfirmCancel;
     private RecyclerView mIntensityDataContainer;
     private AddTrainDataAdapter mAddTrainDataAdapter;
@@ -45,8 +51,24 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
     }
 
     private void initComponents() {
-        mWorkoutName = (EditText) findViewById(R.id.workout_name);
-        mUnit = (EditText) findViewById(R.id.unit);
+        mWorkoutName = (AutoCompleteTextView) findViewById(R.id.workout_name);
+        mUnit = (AutoCompleteTextView) findViewById(R.id.unit);
+        mUnit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                loadUnitAdapterAsync(s.toString());
+            }
+        });
         mDatePicker = (TextView) findViewById(R.id.date_picker);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(mDate);
@@ -155,5 +177,44 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
         if (DEBUG) {
             Log.d(TAG, "mDate: " + mDate);
         }
+    }
+
+    private void loadUnitAdapterAsync(final String txt) {
+        new AsyncTask<Void, Void, ArrayAdapter>() {
+            @Override
+            protected ArrayAdapter doInBackground(Void... params) {
+                final ArrayList<String> data = new ArrayList<>();
+                ArrayAdapter mAdapter = null;
+                Cursor raw = getContentResolver().query(DataProvider.URI_TRAIN_DATA_DISTINCT_UNIT, null, null, null, null);
+                if (raw != null) {
+                    try {
+                        while (raw.moveToNext()) {
+                            String item = raw.getString(0);
+                            if (item.contains(txt)) {
+                                data.add(item);
+                            }
+                        }
+                    } finally {
+                        raw.close();
+                    }
+                }
+                if (!data.isEmpty()) {
+                    mAdapter = new ArrayAdapter(AddTrainDataActivity.this, android.R.layout.simple_dropdown_item_1line, data);
+                }
+                return mAdapter;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayAdapter adapter) {
+                if (DEBUG) {
+                    if (adapter != null) {
+                        Log.v(TAG, "adapter item count: " + adapter.getCount());
+                    } else {
+                        Log.v(TAG, "adapter is null");
+                    }
+                }
+                mUnit.setAdapter(adapter);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }
