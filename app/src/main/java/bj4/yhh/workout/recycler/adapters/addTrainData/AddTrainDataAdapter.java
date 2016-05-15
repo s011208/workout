@@ -64,7 +64,10 @@ public class AddTrainDataAdapter extends RecyclerView.Adapter<BaseHolder> {
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setIntensity(Integer.valueOf(s.toString()));
+                try {
+                    item.setIntensity(Integer.valueOf(s.toString()));
+                } catch (Exception e) {
+                }
             }
         });
         holder.mTimes.setText(times);

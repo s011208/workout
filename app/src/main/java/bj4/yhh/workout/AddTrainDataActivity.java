@@ -1,6 +1,7 @@
 package bj4.yhh.workout;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -12,9 +13,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +56,14 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
 
     private void initComponents() {
         mWorkoutName = (AutoCompleteTextView) findViewById(R.id.workout_name);
+        mWorkoutName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    loadWorkoutNameAdapterAsync(mWorkoutName.getText().toString());
+                }
+            }
+        });
         mWorkoutName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,7 +72,7 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                loadWorkoutNameAdapterAsync(s.toString());
             }
 
             @Override
@@ -69,6 +81,14 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
             }
         });
         mUnit = (AutoCompleteTextView) findViewById(R.id.unit);
+        mUnit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    loadUnitAdapterAsync(mUnit.getText().toString());
+                }
+            }
+        });
         mUnit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -77,12 +97,11 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                loadUnitAdapterAsync(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                loadUnitAdapterAsync(s.toString());
             }
         });
         mDatePicker = (TextView) findViewById(R.id.date_picker);
@@ -206,7 +225,9 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
                     try {
                         while (raw.moveToNext()) {
                             String item = raw.getString(0);
-                            if (item.contains(txt)) {
+                            if (TextUtils.isEmpty(txt)) {
+                                data.add(item);
+                            } else if (item.contains(txt)) {
                                 data.add(item);
                             }
                         }
@@ -230,16 +251,57 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
                     }
                 }
                 mUnit.setAdapter(adapter);
+                if (TextUtils.isEmpty(txt)) {
+                    mUnit.showDropDown();
+                }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void loadWorkoutNameAdapterAsync(final String workName) {
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, WorkoutItemAdapter>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected WorkoutItemAdapter doInBackground(Void... params) {
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(WorkoutItemAdapter workoutItemAdapter) {
+            }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private static class WorkoutItemAdapter extends BaseAdapter {
+        private final Context mContext;
+        private final LayoutInflater mInflater;
+        private final String mWorkoutName;
+
+        public WorkoutItemAdapter(Context context, String workoutName) {
+            super();
+            mContext = context;
+            mWorkoutName = workoutName;
+            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        }
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return null;
+        }
     }
 }
