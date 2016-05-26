@@ -13,12 +13,10 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +60,13 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
                 if (hasFocus) {
                     loadWorkoutNameAdapterAsync(mWorkoutName.getText().toString());
                 }
+            }
+        });
+        mWorkoutName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TrainData data = ((WorkoutNameAdapter) mWorkoutName.getAdapter()).getTrainData(position);
+                Log.d(TAG, "data:" + data);
             }
         });
         mWorkoutName.addTextChangedListener(new TextWatcher() {
@@ -259,49 +264,49 @@ public class AddTrainDataActivity extends Activity implements DatePickDialogFrag
     }
 
     private void loadWorkoutNameAdapterAsync(final String workName) {
-        new AsyncTask<Void, Void, WorkoutItemAdapter>() {
+        new AsyncTask<Void, Void, WorkoutNameAdapter>() {
             @Override
-            protected WorkoutItemAdapter doInBackground(Void... params) {
-                return null;
+            protected WorkoutNameAdapter doInBackground(Void... params) {
+                Log.d(TAG, "WorkoutNameAdapter, workName: " + workName);
+                Cursor raw = getContentResolver().query(DataProvider.URI_TRAIN_DATA, null, TextUtils.isEmpty(workName) ? null : TrainData.TRAIN_TITLE + " like '%" + workName + "%'", null, TrainData.TRAIN_TITLE + " and " + TrainData.ID + " desc");
+                ArrayList<TrainData> data = TrainData.getFromCursor(raw);
+                String woName = "";
+                for (int i = 0; i < data.size(); ++i) {
+                    if (woName.equals(data.get(i).getTrainTitle())) {
+                        data.remove(i);
+                        --i;
+                    } else {
+                        woName = data.get(i).getTrainTitle();
+                    }
+                }
+                Log.v(TAG, "data size:" + data.size());
+                String[] object = new String[data.size()];
+                for (int i = 0; i < data.size(); ++i) {
+                    object[i] = data.get(i).getTrainTitle();
+                }
+                return new WorkoutNameAdapter(AddTrainDataActivity.this, data, object);
             }
 
             @Override
-            protected void onPostExecute(WorkoutItemAdapter workoutItemAdapter) {
+            protected void onPostExecute(WorkoutNameAdapter workoutItemAdapter) {
+                mWorkoutName.setAdapter(workoutItemAdapter);
+                if (TextUtils.isEmpty(workName)) {
+                    mWorkoutName.showDropDown();
+                }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private static class WorkoutItemAdapter extends BaseAdapter {
-        private final Context mContext;
-        private final LayoutInflater mInflater;
-        private final String mWorkoutName;
+    private static class WorkoutNameAdapter extends ArrayAdapter<String> {
+        private final ArrayList<TrainData> mData = new ArrayList<>();
 
-        public WorkoutItemAdapter(Context context, String workoutName) {
-            super();
-            mContext = context;
-            mWorkoutName = workoutName;
-            mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        public WorkoutNameAdapter(Context context, ArrayList<TrainData> data, String[] objects) {
+            super(context, android.R.layout.simple_dropdown_item_1line, objects);
+            mData.addAll(data);
         }
 
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return null;
+        public TrainData getTrainData(int index) {
+            return mData.get(index);
         }
     }
 }

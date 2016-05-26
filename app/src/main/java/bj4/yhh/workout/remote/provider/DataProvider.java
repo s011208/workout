@@ -53,9 +53,9 @@ public class DataProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         switch (sUriMatcher.match(uri)) {
             case CODE_TRAIN_DATA:
-                return mDatabase.query(Database.TABLE_TRAIN_DATA, projection, selection, selectionArgs, sortOrder, null, null);
+                return mDatabase.query(Database.TABLE_TRAIN_DATA, projection, selection, selectionArgs, null, null, sortOrder);
             case CODE_SCHEDULE_DATE:
-                return mDatabase.query(Database.TABLE_SCHEDULE_DATE, projection, selection, selectionArgs, sortOrder, null, null);
+                return mDatabase.query(Database.TABLE_SCHEDULE_DATE, projection, selection, selectionArgs, null, null, sortOrder);
             case CODE_TRAIN_DATA_DISTINCT_UNIT:
                 return mDatabase.query(true, Database.TABLE_TRAIN_DATA, new String[]{TrainData.UNIT}, null, null, null, null, null, null);
 
